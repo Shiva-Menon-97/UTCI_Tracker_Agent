@@ -1,110 +1,154 @@
-# utci-tracker-agent
+# UTCI Heat Stress Tracker Agent 🌡️🌴
 
+An intelligent, spatial-temporal biometeorological analytics system and chatbot designed to track, query, and visualize **Universal Thermal Climate Index (UTCI)** levels across districts and taluks in Kerala, India.
 
-Agent generated with `agents-cli` version `0.6.0`
+---
 
-## Project Structure
+## 📌 Overview & Purpose
 
+The **UTCI Heat Stress Tracker Agent** automates the ingestion of high-resolution climate datasets, maps weather coordinates to administrative boundaries in Kerala, and provides an interactive conversational AI interface (chatbot). 
+
+The goal of this system is to make complex biometeorological indices accessible to researchers, local planners, and citizens. By asking simple questions in plain English, users can query historical averages, calculate the physical area affected by heatwaves, or generate clean trend visualizations on demand.
+
+### What is UTCI?
+The **Universal Thermal Climate Index (UTCI)** is a state-of-the-art biometeorological metric (measured in **°C**) that represents the human body's physiological response to the outdoor thermal environment. Unlike simple temperature indexes, UTCI is computed from four meteorological variables:
+1. **2m Air Temperature** (ambient temperature)
+2. **2m Dew Point Temperature** (humidity proxy)
+3. **10m Wind Speed** (convective cooling)
+4. **Mean Radiant Temperature (MRT)** (estimates solar/terrestrial radiation fluxes)
+
+---
+
+## 🚀 Key Use Cases
+
+*   **Peak Heat & Night Recovery Auditing**: Queries data twice daily: at **1:30 PM IST** (08:00 UTC) to evaluate peak solar heat stress, and at **10:30 PM IST** (17:00 UTC) to analyze whether conditions cool down enough at night for human physiological recovery.
+*   **Spatial Aggregations & Zonal Statistics**: Identifies which taluks or districts are currently experiencing dangerous heat stress levels (e.g., above 32°C Strong Stress or above 38°C Very Strong Stress).
+*   **Impact Area Estimation**: Computes the exact geographical area (in square kilometers) experiencing specific thermal conditions using local spatial grids.
+*   **Conversational Data Visualization**: Automatically generates line charts (temporal trends) and column/bar charts (district/taluk comparisons) directly in the chat window.
+
+---
+
+## 🛠️ Technology Stack
+
+### Data Pipeline & Processing
+*   **Thermofeel**: ECMWF's official library for thermal comfort index calculations.
+*   **Xarray & NetCDF4**: For handling multi-dimensional climate grids and raster arrays.
+*   **GeoPandas & Shapely**: Maps lat-lon grid points to Kerala's administrative districts and taluks via vector-based polygon spatial joins.
+*   **Numpy & Scipy**: Grid math and array computations.
+*   **Schedule**: Handles the automated daily acquisition loop.
+
+### Conversational AI & Backend
+*   **Google ADK (Agent Development Kit)**: Powers the semantic reasoning engine and tool calling loop.
+*   **Gemini Models**: Configured to run `gemini-3.1-flash-lite` for cost-efficient, fast reasoning.
+*   **Model Context Protocol (MCP)**: Utilizes the `@antv/mcp-server-chart` protocol to construct charts dynamically.
+*   **FastAPI & Uvicorn**: Lightweight REST API serving the web application and chat endpoints.
+*   **PostgreSQL & SQLAlchemy**: Relational storage for tabular space-time grid data.
+
+### Frontend Application
+*   **React 18 & TypeScript**: Single-page application architecture.
+*   **Vite**: Frontend build system.
+*   **React Markdown & Remark GFM**: Renders rich formatting, markdown tables, and dynamic chart images.
+
+---
+
+## 📂 Project Structure
+
+```text
+UTCI_Tracker_Agent/
+├── 📂 app/                   # Backend Agent Code (ADK framework)
+│   ├── agent.py              # Root agent instructions and SQL database tools
+│   └── simple_server.py      # FastAPI server running chat and last_update endpoints
+├── 📂 pipeline/              # Data Acquisition & Processing Pipeline
+│   ├── 📂 kerala_geojsons/   # Admin shape files (district/taluk)
+│   ├── compute_utci.py       # Retrieves Open-Meteo variables and calculates UTCI
+│   ├── ingest_to_postgres.py # Spatial joins coordinates and inserts to Postgres
+│   ├── run_pipeline.py       # Master script to run fetch-process-ingest sequence
+│   └── run_scheduler.py      # Background schedule loop for automated updates
+├── 📂 frontend/              # Frontend React Web App
+│   ├── 📂 src/
+│   │   ├── 📂 components/
+│   │   │   ├── Chatbot.tsx   # React Chatbot interface
+│   │   │   └── Chatbot.test.tsx # UI component unit tests
+│   │   └── setupTests.ts     # JSDOM matchers and mock settings
+│   ├── package.json          # Frontend packages and scripts
+│   └── vite.config.ts        # Vite + Vitest config
+├── 📂 tests/                 # Testing Suite
+│   ├── 📂 integration/
+│   │   └── test_agent.py     # Agent response streaming tests
+│   └── 📂 unit/
+│       ├── test_compute_utci.py  # Mocked Open-Meteo & UTCI pipeline tests
+│       └── test_ingest.py        # Database mapping and ingestion tests
+└── pyproject.toml            # Python dependencies (numpy, xarray, geopandas, etc.)
 ```
-utci-tracker-agent/
-├── app/         # Core agent code
-│   ├── agent.py               # Main agent logic
-│   ├── fast_api_app.py        # FastAPI Backend server
-│   └── app_utils/             # App utilities and helpers
-├── tests/                     # Unit, integration, and load tests
-├── GEMINI.md                  # AI-assisted development guide
-└── pyproject.toml             # Project dependencies
-```
 
-> 💡 **Tip:** Use [Gemini CLI](https://github.com/google-gemini/gemini-cli) for AI-assisted development - project context is pre-configured in `GEMINI.md`.
+---
 
-## Requirements
+## ⚙️ Setup & Running Locally
 
-Before you begin, ensure you have:
-- **uv**: Python package manager (used for all dependency management in this project) - [Install](https://docs.astral.sh/uv/getting-started/installation/) ([add packages](https://docs.astral.sh/uv/concepts/dependencies/) with `uv add <package>`)
-- **agents-cli**: Agents CLI - Install with `uv tool install google-agents-cli`
-- **Google Cloud SDK**: For GCP services - [Install](https://cloud.google.com/sdk/docs/install)
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+*   [**Python 3.11+**](https://www.python.org/) & [**uv**](https://docs.astral.sh/uv/) (Astral's fast Python package manager)
+*   [**Node.js v18+**](https://nodejs.org/) & `npm`
+*   [**PostgreSQL**](https://www.postgresql.org/) (running locally, default port `5432`)
+*   A **Gemini API Key** (set in a local `.env` file at the project root: `GEMINI_API_KEY=your_key_here`)
 
-
-## Quick Start
-
-Install `agents-cli` and its skills if not already installed:
-
+### 2. Database Setup
+Create a local database named `utci-tracker-db`. You can configure your credentials via these environment variables (or let it fallback to defaults):
 ```bash
-uvx google-agents-cli setup
+DB_USER=postgres
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=utci-tracker-db
 ```
 
-Install required packages:
-
+### 3. Data Acquisition & Pipeline Run
+Sync your virtual environment and install backend dependencies:
 ```bash
-agents-cli install
+uv sync
 ```
 
-Test the agent with a local web server:
-
-```bash
-agents-cli playground
-```
-
-You can also use features from the [ADK](https://adk.dev/) CLI with `uv run adk`.
-
-## Commands
-
-| Command              | Description                                                                                 |
-| -------------------- | ------------------------------------------------------------------------------------------- |
-| `agents-cli install` | Install dependencies using uv                                                         |
-| `agents-cli playground` | Launch local development environment                                                  |
-| `agents-cli lint`    | Run code quality checks                                                               |
-| `agents-cli eval`    | Evaluate agent behavior (generate, grade, analyze, and more — see `agents-cli eval --help`) |
-| `uv run pytest tests/unit tests/integration` | Run unit and integration tests                                                        || [A2A Inspector](https://github.com/a2aproject/a2a-inspector) | Launch A2A Protocol Inspector                                                        |
-
-## 🛠️ Project Management
-
-| Command | What It Does |
-|---------|--------------|
-| `agents-cli scaffold enhance` | Add CI/CD pipelines and Terraform infrastructure |
-| `agents-cli infra cicd` | One-command setup of entire CI/CD pipeline + infrastructure |
-| `agents-cli scaffold upgrade` | Auto-upgrade to latest version while preserving customizations |
-
-### 3. Data Acquisition Pipeline
-
-The agent is supported by an automated data pipeline that queries the Open-Meteo API for historical observations at 1:30 PM IST (08:00 UTC) and 10:30 PM IST (17:00 UTC) daily.
-
-You have two options for running the pipeline:
-
-**Option A: Manual Sync**
-If you want to perform a one-time sync of the latest data:
+**Option A: Manual Ingestion Sync**
+To query Open-Meteo for the trailing 7 days of historical observations and ingest them:
 ```bash
 uv run python pipeline/run_pipeline.py
 ```
 
 **Option B: Automated Background Scheduler**
-To set up true automation, you can run the built-in scheduler script in the background. It will automatically trigger the pipeline every day at 1:45 PM and 10:45 PM local time.
+To set up continuous daily syncs at 1:45 PM and 10:45 PM:
 ```bash
 uv run python pipeline/run_scheduler.py
 ```
 
+### 4. Running the Web Application
+
+**Start the Backend API Server:**
+```bash
+uv run python app/simple_server.py
+```
+*(Runs on `http://localhost:8000`)*
+
+**Start the React Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+*(Runs on `http://localhost:5173`)*
+
 ---
 
-## Development
+## 🧪 Testing
 
-Edit your agent logic in `app/agent.py` and test with `agents-cli playground` - it auto-reloads on save.
-
-## Deployment
-
+### Backend tests (Pytest)
+Runs calculations mocks, ingestion spatial joins checks, and streaming integration:
 ```bash
-gcloud config set project <your-project-id>
-agents-cli deploy
+uv run pytest
 ```
 
-To add CI/CD and Terraform, run `agents-cli scaffold enhance`.
-To set up your production infrastructure, run `agents-cli infra cicd`.
-
-## Observability
-
-Built-in telemetry exports to Cloud Trace, BigQuery, and Cloud Logging.
-
-## A2A Inspector
-
-This agent supports the [A2A Protocol](https://a2a-protocol.org/). Use the [A2A Inspector](https://github.com/a2aproject/a2a-inspector) to test interoperability.
-See the [A2A Inspector docs](https://github.com/a2aproject/a2a-inspector) for details.
+### Frontend tests (Vitest)
+Runs Vitest assertions inside JSDOM:
+```bash
+cd frontend
+npm run test
+```
