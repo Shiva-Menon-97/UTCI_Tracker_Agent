@@ -10,9 +10,13 @@ logging.basicConfig(
 def run_data_pipeline():
     logging.info("Triggering UTCI Data Acquisition Pipeline...")
     try:
-        # Run the pipeline script using uv
+        import sys
+        from pathlib import Path
+        script_dir = Path(__file__).parent.resolve()
+        pipeline_script = script_dir / "run_pipeline.py"
+        # Run the pipeline script using uv/python dynamically
         result = subprocess.run(
-            ["uv", "run", "python", "run_pipeline.py"],
+            [sys.executable, str(pipeline_script)],
             capture_output=True,
             text=True,
             check=True

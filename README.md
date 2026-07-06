@@ -75,13 +75,13 @@ You have two options for running the pipeline:
 **Option A: Manual Sync**
 If you want to perform a one-time sync of the latest data:
 ```bash
-uv run python run_pipeline.py
+uv run python pipeline/run_pipeline.py
 ```
 
 **Option B: Automated Background Scheduler**
 To set up true automation, you can run the built-in scheduler script in the background. It will automatically trigger the pipeline every day at 1:45 PM and 10:45 PM local time.
 ```bash
-uv run python run_scheduler.py
+uv run python pipeline/run_scheduler.py
 ```
 
 ---

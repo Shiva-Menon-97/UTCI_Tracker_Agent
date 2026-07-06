@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import numpy as np
 import pytest
 import xarray as xr
-from compute_utci import main, LAT_NORTH, LAT_SOUTH, LON_WEST, LON_EAST, RESOLUTION
+from pipeline.compute_utci import main, LAT_NORTH, LAT_SOUTH, LON_WEST, LON_EAST, RESOLUTION
 
 @pytest.fixture
 def mock_open_meteo():
@@ -29,8 +29,8 @@ def mock_open_meteo():
     
     return mock_hourly_data
 
-@patch("compute_utci.requests.get")
-@patch("compute_utci.datetime")
+@patch("pipeline.compute_utci.requests.get")
+@patch("pipeline.compute_utci.datetime")
 def test_compute_utci_pipeline(mock_datetime, mock_get, tmp_path):
     # Mock current time to 2026-07-06 13:00:00 (so UTC indices 8 of today are in the past)
     import datetime as dt_module
@@ -74,8 +74,8 @@ def test_compute_utci_pipeline(mock_datetime, mock_get, tmp_path):
     # Mock output file to tmp_path
     output_file = os.path.join(tmp_path, "utci_kerala_test.nc")
     
-    with patch("compute_utci.OUTPUT_NC_FILE", output_file):
-        with patch("compute_utci.Path.mkdir"), patch("compute_utci.Path.write_text"), patch("compute_utci.Path.exists", return_value=False):
+    with patch("pipeline.compute_utci.OUTPUT_NC_FILE", output_file):
+        with patch("pipeline.compute_utci.Path.mkdir"), patch("pipeline.compute_utci.Path.write_text"), patch("pipeline.compute_utci.Path.exists", return_value=False):
             main()
             
     # Check if NetCDF file was created and contains valid structure

@@ -53,7 +53,8 @@ RESOLUTION = 0.1  # degrees (~11 km resolution)
 # Forecast hour index. Open-Meteo hourly series with timezone=UTC starts at 00:00 UTC.
 # IST = UTC + 5:30, so to target ~14:00 IST (near peak heat stress) use step 8 (08:00 UTC).
 FORECAST_STEP = 8
-OUTPUT_NC_FILE = "utci_kerala.nc"
+SCRIPT_DIR = Path(__file__).parent.resolve()
+OUTPUT_NC_FILE = str(SCRIPT_DIR / "utci_kerala.nc")
 
 # Surface / physical assumptions
 LAND_ALBEDO = 0.20  # tropical land surface albedo (Kerala)

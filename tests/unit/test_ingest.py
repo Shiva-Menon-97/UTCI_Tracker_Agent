@@ -6,7 +6,7 @@ import pytest
 import xarray as xr
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
-import ingest_to_postgres
+from pipeline import ingest_to_postgres
 
 @pytest.fixture
 def mock_netcdf(tmp_path):
@@ -53,7 +53,7 @@ def mock_geojson_files(tmp_path):
     
     return d_path, t_path
 
-@patch("ingest_to_postgres.create_engine")
+@patch("pipeline.ingest_to_postgres.create_engine")
 def test_ingest_pipeline(mock_create_engine, mock_netcdf, mock_geojson_files):
     # Setup mocks for postgres ingestion
     mock_engine = MagicMock()
@@ -67,9 +67,9 @@ def test_ingest_pipeline(mock_create_engine, mock_netcdf, mock_geojson_files):
     os.environ["DB_NAME"] = "utci-tracker-test-db"
     
     # Patch script paths to point to our mock files
-    with patch("ingest_to_postgres.RASTER_PATH", ingest_to_postgres.Path(mock_netcdf)), \
-         patch("ingest_to_postgres.DISTRICT_GEOJSON", ingest_to_postgres.Path(dist_path)), \
-         patch("ingest_to_postgres.TALUK_GEOJSON", ingest_to_postgres.Path(taluk_path)):
+    with patch("pipeline.ingest_to_postgres.RASTER_PATH", ingest_to_postgres.Path(mock_netcdf)), \
+         patch("pipeline.ingest_to_postgres.DISTRICT_GEOJSON", ingest_to_postgres.Path(dist_path)), \
+         patch("pipeline.ingest_to_postgres.TALUK_GEOJSON", ingest_to_postgres.Path(taluk_path)):
              
              ingest_to_postgres.main()
              
