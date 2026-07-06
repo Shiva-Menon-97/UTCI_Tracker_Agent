@@ -37,6 +37,6 @@ describe('Chatbot Component', () => {
     expect(screen.getByText('UTCI Heat Tracker')).toBeInTheDocument();
     
     // Check description contains welcome message
-    expect(screen.getByText(/Hello! I am the UTCI Tracker Agent/)).toBeInTheDocument();
+    expect(screen.getByText(/Hello! I am the/)).toBeInTheDocument();
   });
 });

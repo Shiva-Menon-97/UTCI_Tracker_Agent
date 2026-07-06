@@ -40,7 +40,15 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([{
     id: '1',
     role: 'agent',
-    text: 'Hello! I am the UTCI Tracker Agent. Ask me about thermal comfort, heat stress in Kerala, or ask me to generate charts from the data!'
+    text: `Hello! I am the **UTCI Heat Tracker Agent**. I analyze spatial and temporal thermal comfort and heat stress trends across Kerala's districts and taluks, and can generate custom data visualizations on demand.
+
+### What is UTCI?
+The **Universal Thermal Climate Index (UTCI)** is a biometeorological metric (expressed in **°C** or degree Centigrade) that represents the human body's physiological response to the outdoor thermal environment. It takes into account air temperature, humidity, wind speed, and solar/terrestrial radiation.
+
+### Try asking me:
+1. *Show me the average UTCI value in Palakkad for yesterday afternoon.*
+2. *Is there any district experiencing strong heat stress (above 32°C) today?*
+3. *Plot a line chart of the daily UTCI trend for Thrissur over the last week.*`
   }]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
