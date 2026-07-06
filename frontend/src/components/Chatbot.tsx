@@ -42,6 +42,8 @@ export default function Chatbot() {
     role: 'agent',
     text: `Hello! I am the **UTCI Heat Tracker Agent**. I analyze spatial and temporal thermal comfort and heat stress trends across Kerala's districts and taluks, and can generate custom data visualizations on demand.
 
+My conclusions are based on the last 7 days of meteorological observations acquired from the **ECMWF** (European Centre for Medium-Range Weather Forecasts) model. The daily data readings are acquired for two specific timestamps: **1:30 PM** (time of usual peak of heat stress) and **10:30 PM** (to understand thermal comfort in the night time, when the human body is supposed to cool down).
+
 ### What is UTCI?
 The **Universal Thermal Climate Index (UTCI)** is a biometeorological metric (expressed in **°C** or degree Centigrade) that represents the human body's physiological response to the outdoor thermal environment. It takes into account air temperature, humidity, wind speed, and solar/terrestrial radiation.
 
