@@ -1,0 +1,25 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "utci_chart_thrissur",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Can you generate a line chart of the UTCI across time for Thrissur?"}]
+      }
+    },
+    {
+      "eval_case_id": "utci_table_tvm",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Show me a table of the UTCI values for Thiruvananthapuram over the last week."}]
+      }
+    },
+    {
+      "eval_case_id": "utci_high_level",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Which district has the highest thermal comfort index during the night in the last week?"}]
+      }
+    }
+  ]
+}
