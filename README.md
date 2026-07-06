@@ -17,6 +17,43 @@ The **Universal Thermal Climate Index (UTCI)** is a state-of-the-art biometeorol
 3. **10m Wind Speed** (convective cooling)
 4. **Mean Radiant Temperature (MRT)** (estimates solar/terrestrial radiation fluxes)
 
+## 📐 Architecture & Data Pipeline
+
+```mermaid
+graph TD
+    %% Styling
+    classDef main fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#fff;
+    classDef tool fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#fff;
+    classDef database fill:#1e1b4b,stroke:#8b5cf6,stroke-width:2px,color:#fff;
+    classDef client fill:#1c1917,stroke:#d97706,stroke-width:2px,color:#fff;
+
+    %% Data Pipeline Flow
+    subgraph Data_Pipeline [Data Ingestion & Processing Pipeline]
+        OM[Open-Meteo API<br/>ECMWF IFS Model] -->|Hourly Weather Variables| TF[compute_utci.py<br/>MRT & UTCI Physics Engine]
+        TF -->|Raster Output .nc| SJ[ingest_to_postgres.py<br/>GeoPandas Spatial Join]
+        GeoJSON[(Kerala Admin GeoJSONs)] -->|Boundaries mapping| SJ
+        SJ -->|Clean Zonal Statistics| DB[(PostgreSQL Database<br/>utci_grid table)]
+    end
+
+    %% Conversational Agent Flow
+    subgraph Agent_Reasoning [Conversational Agent Loop]
+        UI[React Chatbot UI] <-->|HTTP POST /api/chat| API[FastAPI Simple Server]
+        API <-->|ADK Runner Context| Agent[Gemini Agent<br/>gemini-3.1-flash-lite]
+        
+        Agent <-->|Read-only SELECT| ToolDB[query_utci_database Tool]
+        ToolDB <-->|Execute SQL| DB
+        
+        Agent <-->|Semantic formatting| ToolChart[MCP Chart Toolset]
+        ToolChart <-->|Generate Chart PNG| MCP[AntV MCP Chart Server]
+    end
+
+    %% Apply Styles
+    class OM,TF,SJ main;
+    class ToolDB,ToolChart,MCP tool;
+    class DB,GeoJSON database;
+    class UI,API,Agent client;
+```
+
 ---
 
 ## 🚀 Key Use Cases
