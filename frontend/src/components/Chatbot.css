@@ -201,6 +201,17 @@
     text-decoration: underline;
   }
   
+  /* Markdown Lists */
+  .message-content ol,
+  .message-content ul {
+    padding-left: 20px;
+    margin: 8px 0;
+  }
+  
+  .message-content li {
+    margin-bottom: 6px;
+  }
+  
   /* Markdown Tables */
   .message-content table {
     border-collapse: collapse;

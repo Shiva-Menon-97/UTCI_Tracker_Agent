@@ -45,6 +45,12 @@ export default function Chatbot() {
 ### What is UTCI?
 The **Universal Thermal Climate Index (UTCI)** is a biometeorological metric (expressed in **°C** or degree Centigrade) that represents the human body's physiological response to the outdoor thermal environment. It takes into account air temperature, humidity, wind speed, and solar/terrestrial radiation.
 
+### UTCI Thermal Comfort Ranges:
+*   **Above 32°C**: Strong to Extreme Heat Stress (dangerous)
+*   **26°C to 32°C**: Moderate Heat Stress
+*   **9°C to 26°C**: No Thermal Stress (Optimal Comfort)
+*   **Below 9°C**: Cold Stress
+
 ### Try asking me:
 1. *Show me the average UTCI value in Palakkad for yesterday afternoon.*
 2. *Is there any district experiencing strong heat stress (above 32°C) today?*
