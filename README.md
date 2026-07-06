@@ -189,3 +189,18 @@ Runs Vitest assertions inside JSDOM:
 cd frontend
 npm run test
 ```
+
+---
+
+## ⚖️ License & Attributions
+
+### Open Data & API Attributions
+This project acquires, processes, and evaluates climate datasets. Users of this codebase or its data must comply with the following open-source data attributions:
+*   **Open-Meteo Weather API**: Meteorological variables are retrieved from the [Open-Meteo API](https://open-meteo.com/), which is licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** license.
+*   **ECMWF Forecast Data**: The atmospheric and radiation datasets are derived from the ECMWF IFS (Integrated Forecasting System) high-resolution model data, licensed under **CC BY 4.0** by the [European Centre for Medium-Range Weather Forecasts (ECMWF)](https://www.ecmwf.int/).
+    *   *Attribution Notice:* "Contains modified Copernicus Atmosphere Monitoring Service / ECMWF information [2026]."
+
+### Software & Library Licensing
+*   **Thermofeel**: Calculations for Mean Radiant Temperature (MRT) and UTCI are built using the official [thermofeel](https://github.com/ecmwf-projects/thermofeel) library developed by ECMWF, which is licensed under the **Apache License 2.0**.
+*   **Project Codebase**: The software code written for this agent (excluding third-party libraries and static boundary assets) is licensed under the **Apache License 2.0** (standard for ADK scaffolded projects).
+
