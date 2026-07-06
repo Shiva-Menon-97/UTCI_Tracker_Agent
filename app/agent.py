@@ -71,11 +71,14 @@ def query_utci_database(sql_query: str) -> dict:
 
             result = conn.execute(text(sql_query))
             rows = [dict(row._mapping) for row in result]
-            # Convert dates to string for JSON compliance
+            # Convert dates and decimals for JSON compliance
+            import decimal
             for row in rows:
                 for k, v in row.items():
                     if isinstance(v, (datetime.date, datetime.datetime)):
                         row[k] = v.isoformat()
+                    elif isinstance(v, decimal.Decimal):
+                        row[k] = float(v)
             return {"status": "success", "results": rows}
     except Exception as e:
         return {"status": "error", "error": str(e)}
