@@ -76,7 +76,6 @@ graph TD
 
 ### Conversational AI & Backend
 *   **Google ADK (Agent Development Kit)**: Powers the semantic reasoning engine and tool calling loop.
-*   **Gemini Models**: Configured to run `gemini-3.1-flash-lite` for cost-efficient, fast reasoning.
 *   **Model Context Protocol (MCP)**: Utilizes the `@antv/mcp-server-chart` protocol to construct charts dynamically.
 *   **FastAPI & Uvicorn**: Lightweight REST API serving the web application and chat endpoints.
 *   **PostgreSQL & SQLAlchemy**: Relational storage for tabular space-time grid data.
